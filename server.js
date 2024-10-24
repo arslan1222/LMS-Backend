@@ -1,9 +1,10 @@
-const app = require("./app");
+import app from './app.js';
+import connectDB from './config/connectDB.js';
 
+const PORT = process.env.PORT;
 
-const PORT = 8080;
-
-app.listem(PORT, ()=>{
+app.listen(PORT, async ()=>{
+    await connectDB();
     console.log(`Server is running at ${PORT}`);
     
 })
