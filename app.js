@@ -16,6 +16,8 @@ app.use(cors({
 app.use(cookieParser());
 app.use(morgan('dev'));
 
+app.use("/api/vi/routes", )
+
 app.use("/ping", (req,res)=>{
     res.send('/pong');
 });
@@ -23,6 +25,8 @@ app.use("/ping", (req,res)=>{
 app.all('*', (req, res)=>{
     res.status(404).send("OOPS! 404 Page not found..");
 });
+
+app.use(errorMiddleware);
 
 export default app;
 

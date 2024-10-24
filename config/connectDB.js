@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-let MONGO_DB = 'mongodb://127.0.0.1/27017/lms';
+const MONGO_DB = 'mongodb://127.0.0.1/27017/lms';
 
 // By using then
 
@@ -15,7 +15,6 @@ let MONGO_DB = 'mongodb://127.0.0.1/27017/lms';
 // });
 
 // By using try catch
-
 async function connectDB(){
 
     try {
