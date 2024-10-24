@@ -1,4 +1,4 @@
-const errorMiddleware = (err, req, res, next)=>{
+const errorMiddelware = (err, req, res, next)=>{
     err.statusCode = err.statusCode || 500;
     err.message = err.message || "Sometihing went wrong!";
 
@@ -9,4 +9,4 @@ const errorMiddleware = (err, req, res, next)=>{
     })
 }
 
-export default errorMiddleware;
+export default errorMiddelware;

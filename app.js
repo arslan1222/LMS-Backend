@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import morgan from "morgan";
 import express from "express";
+import userRoutes from "./routes/user.routes.js";
+import errorMiddelware from "./middelwares/errorMiddelware.js";
 
 const app = express();
 
@@ -16,17 +18,17 @@ app.use(cors({
 app.use(cookieParser());
 app.use(morgan('dev'));
 
-app.use("/api/vi/routes", )
-
 app.use("/ping", (req,res)=>{
     res.send('/pong');
 });
+
+app.use("/api/vi/routes", userRoutes);
 
 app.all('*', (req, res)=>{
     res.status(404).send("OOPS! 404 Page not found..");
 });
 
-app.use(errorMiddleware);
+app.use(errorMiddelware);
 
 export default app;
 
