@@ -29,10 +29,10 @@ const userSchema = new Schema({
         select: false
     },
     avatar: {
-        publicId: {
+        public_id: {
             type: "String",
         },
-        secureURL: {
+        secure_url: {
             type: "String"
         }  
     },
