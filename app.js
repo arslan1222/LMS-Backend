@@ -22,7 +22,7 @@ app.use("/ping", (req,res)=>{
     res.send('/pong');
 });
 
-app.use("/api/vi/routes", userRoutes);
+app.use("/api/v1/routes", userRoutes);
 
 app.all('*', (req, res)=>{
     res.status(404).send("OOPS! 404 Page not found..");
