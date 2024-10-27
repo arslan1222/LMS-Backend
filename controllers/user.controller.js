@@ -139,7 +139,7 @@ const getProfile = async(req, res)=>{
     }
 }
 
-const resetPassword = async (req, res, next) => {
+const forgotPassword = async (req, res, next) => {
     const { email } = req.body;
     if (!email) {
         return next(new AppError("Email is required", 400));
@@ -177,7 +177,7 @@ const resetPassword = async (req, res, next) => {
     }
 };
 
-const forgotPassword = ()=>{
+const resetPassword = ()=>{
 
 }
 

@@ -9,8 +9,8 @@ router.post("/register", upload.single("avatar"), register);
 router.post("/login", login);
 router.get("/logout", logout);
 router.get("/me", isLoggedIn, getProfile);
-router.post("/forgot/password", forgotPassword);
-router.post("/reset", resetPassword);
+router.post("/reset", forgotPassword);
+router.post("/reset/:resetToken", resetPassword);
 
 
 
