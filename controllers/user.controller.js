@@ -9,14 +9,20 @@ import crypto from "crypto";
 const cookieOptions = {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: true
-}
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "Strict"
+};
 
 const register = async (req, res, next) => {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, role } = req.body;
 
-    if (!fullName || !email || !password) {
-        return next(new AppError("All fields are required", 400));
+    const requestingUser = req.user; 
+    console.log("Requesting User:", requestingUser);
+
+    if (role === "ADMIN") {
+        if (!requestingUser || requestingUser.role !== "ADMIN") {
+            return next(new AppError("You are not authorized to create an ADMIN user", 403));
+        }
     }
 
     const userExists = await User.findOne({ email });
@@ -28,6 +34,7 @@ const register = async (req, res, next) => {
         fullName,
         email,
         password,
+        role: role || 'USER',
         avatar: {
             public_id: email,
             secure_url: "https://res.cloudinary.com/du9jzqlpt/image/upload/v1674647316/avatar_drzgxv.jpg"
@@ -81,28 +88,23 @@ const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password) {
-            return next(new AppError("All fields are required", 400));
-        }
-
         const user = await User.findOne({ email }).select("+password");
 
         if (!user || !(await user.comparePassword(password))) {
-            return next(new AppError("Email or Password is incorrect!", 400));
+            return next(new AppError("Invalid email or password", 401));
         }
 
-        const token = await user.generateJWTToken();
-        user.password = undefined;
+        const jwtToken = user.generateJWTToken();
 
-        res.cookie("token", token, cookieOptions);
+        res.cookie("token", jwtToken, cookieOptions);
 
         res.status(200).json({
             success: true,
-            message: "User logged in successfully",
-            user
+            message: "Logged in successfully",
+            user: { id: user._id, role: user.role }
         });
     } catch (error) {
-        return next(new AppError(error.message, 500));
+        next(error);
     }
 };
 
@@ -176,7 +178,7 @@ const forgotPassword = async (req, res, next) => {
     } catch (error) {
         user.forgotPasswordExpiry = undefined;
         user.forgotPasswordToken = undefined;
-        await user.save();  // Save the reset fields
+        await user.save();
         return next(new AppError(error.message, 500));
     }
 };
